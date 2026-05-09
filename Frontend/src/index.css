@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  --color-primary-50: #f5f7ff;
+  --color-primary-100: #ebf0fe;
+  --color-primary-200: #dce4fd;
+  --color-primary-300: #bdccfb;
+  --color-primary-400: #93a8f8;
+  --color-primary-500: #637df2;
+  --color-primary-600: #4a5ee8;
+  --color-primary-700: #3a4ad6;
+  --color-primary-800: #333fad;
+  --color-primary-900: #2e398a;
+}
+
+@layer base {
+  body {
+    @apply bg-[#F8FAFC] text-slate-900 font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
+  }
+}
+
+@utility btn {
+  @apply px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+@utility btn-primary {
+  @apply btn bg-primary-600 text-white hover:bg-primary-700 shadow-lg shadow-primary-500/20 border border-primary-500/10;
+}
+
+@utility btn-secondary {
+  @apply btn bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-sm;
+}
+
+@utility card {
+  @apply bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100/80 p-6 transition-all duration-300;
+}
+
+@utility input {
+  @apply w-full px-5 py-3 rounded-2xl border border-slate-200 bg-slate-50/50 focus:outline-none focus:ring-4 focus:ring-primary-500/10 focus:border-primary-400 focus:bg-white transition-all duration-300;
+}
+
+@utility label {
+  @apply block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1;
+}
