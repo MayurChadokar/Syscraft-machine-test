@@ -26,7 +26,13 @@ const sendEmail = async (options) => {
         console.log('Email sent successfully:', info.messageId);
         return info;
     } catch (error) {
-        console.error('Nodemailer Error:', error.message);
+        console.error('Nodemailer Error Details:', {
+            message: error.message,
+            code: error.code,
+            command: error.command,
+            host: process.env.EMAIL_HOST,
+            user: process.env.EMAIL_USER
+        });
         throw error;
     }
 };

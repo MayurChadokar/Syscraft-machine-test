@@ -1,6 +1,7 @@
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const generateCertificate = (data) => {
     return new Promise((resolve, reject) => {
@@ -10,14 +11,10 @@ const generateCertificate = (data) => {
                 size: 'A4',
             });
 
-            const { userName, eventName, date } = data;
+            const { userName = 'Participant', eventName, date } = data;
             const filename = `certificate_${userName.replace(/\s+/g, '_')}_${Date.now()}.pdf`;
-            const filePath = path.join(__dirname, '../utils/temp', filename);
-
-            // Ensure temp directory exists
-            if (!fs.existsSync(path.join(__dirname, '../utils/temp'))) {
-                fs.mkdirSync(path.join(__dirname, '../utils/temp'), { recursive: true });
-            }
+            const tempDir = os.tmpdir();
+            const filePath = path.join(tempDir, filename);
 
             const stream = fs.createWriteStream(filePath);
             doc.pipe(stream);
