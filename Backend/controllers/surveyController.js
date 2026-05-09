@@ -71,29 +71,29 @@ const submitSurvey = async (req, res) => {
 
         await Event.findByIdAndUpdate(eventId, { $inc: { totalSurveySubmissions: 1 } });
 
-        // Generate and Send Certificate Email
-        generateCertificate({
-            userName: name || 'Participant',
-            eventName: event.title,
-            date: event.date
-        }, async (filePath) => {
-            try {
-                await sendEmail({
-                    email: email,
-                    subject: `Certificate of Participation: ${event.title}`,
-                    message: `Hi ${name || 'Participant'}, Your certificate for ${event.title} is ready.`,
-                    html: getCertificateTemplate(name || 'Participant', event.title),
-                    attachments: [
-                        {
-                            filename: `Certificate_${event.title.replace(/\s+/g, '_')}.pdf`,
-                            path: filePath
-                        }
-                    ]
-                });
-            } catch (emailErr) {
-                console.error('Certificate email failed:', emailErr.message);
-            }
-        });
+        // Generate and Send Certificate Email (Properly awaited for production reliability)
+        try {
+            const filePath = await generateCertificate({
+                userName: name || 'Participant',
+                eventName: event.title,
+                date: event.date
+            });
+
+            await sendEmail({
+                email: email,
+                subject: `Certificate of Participation: ${event.title}`,
+                message: `Hi ${name || 'Participant'}, Your certificate for ${event.title} is ready.`,
+                html: getCertificateTemplate(name || 'Participant', event.title),
+                attachments: [
+                    {
+                        filename: `Certificate_${event.title.replace(/\s+/g, '_')}.pdf`,
+                        path: filePath
+                    }
+                ]
+            });
+        } catch (err) {
+            console.error('Certificate process failed:', err.message);
+        }
 
         res.status(201).json({ message: 'Survey submitted successfully' });
     } catch (error) {
